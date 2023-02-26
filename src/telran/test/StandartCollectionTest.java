@@ -126,7 +126,11 @@ class StandartCollectionTest {
 	private void createAndIterateTreeInOrder(int[] array) {
 		// create tree, add in tree numbers from a given array
 		// and iterate in the order of array defined in 122
-		TreeComparator comp = new TreeComparator();
+		Comparator<Integer> comp = (o1, o2) -> {
+			int i1 = o1.toString().chars().map(n -> n - '0').sum();
+			int i2 = o2.toString().chars().map(n -> n - '0').sum();
+			return i1 - i2;
+		};
 		TreeSet<Integer> tree = new TreeSet<>(comp);
 		for (int n : array) {
 			tree.add(n);
