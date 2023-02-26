@@ -10,23 +10,18 @@ public class StackInt {
 	public void push(int num) {
 		// adds num into top of stack
 		list.add(num);
-		if (max.isEmpty() || num > max.getLast()) {
+		if (max.isEmpty() || num >= max.getLast()) {
 			max.add(num);
 		}
 	}
 
 	public int pop() {
 		// returns a number from top of stack or throws NoSuchElementException if the stack is empty
-		if (!isEmpty()) {
-			int res = list.getLast();
+			int res = list.removeLast();
 			if (res == max.getLast()) {
 				max.removeLast();
 			}
-			list.removeLast();
 			return res;
-		} else {
-			throw new NoSuchElementException();
-		}
 	}
 
 	public boolean isEmpty() {
@@ -36,11 +31,7 @@ public class StackInt {
 
 	public int getMax() {
 		// returns maximal value of the stack or throws NoSuchElementException if the stack is empty
-		if (!isEmpty()) {
 			return max.getLast();
-		} else {
-			throw new NoSuchElementException();
-		}
 	}
 
 }

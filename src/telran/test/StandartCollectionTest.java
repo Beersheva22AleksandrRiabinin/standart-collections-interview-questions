@@ -2,6 +2,7 @@ package telran.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import telran.util.MyArrayInt;
 import telran.util.StackInt;
 
 class StandartCollectionTest {
@@ -32,6 +34,7 @@ class StandartCollectionTest {
 	}
 	
 	@Test
+	@Disabled
 	void displayOccurenciesCount() {
 		String[] strings = {"lmn", "abc", "abc", "lmn", "a", "lmn"};
 //		Map<Integer, List<String>> map = Arrays.stream(strings).
@@ -46,12 +49,13 @@ class StandartCollectionTest {
 	}
 	
 	@Test
+	@Disabled
 	void displayDigitStatistics() {
 		//Generate 1kk random numbers [1-Integer.MAX_VALUE)
 		//Display digits and counts of their occurrences in descending order of the counts
 		//Consider using flatMap for getting many from one 
 		new Random().ints(1, Integer.MAX_VALUE).limit(1_000_000)
-					.mapToObj(n -> Integer.toString(n)).flatMap(n -> n.chars().boxed())
+					.flatMap(n -> Integer.toString(n).chars()).boxed()
 					.collect(Collectors.groupingBy(s -> s, Collectors.counting()))
 					.entrySet().stream().sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
 					.forEach(e -> System.out.printf("%c: %d\n", e.getKey(), e.getValue()));	
@@ -79,6 +83,58 @@ class StandartCollectionTest {
 		assertFalse(st.isEmpty());
 		assertEquals(3, st.pop());
 		assertTrue(st.isEmpty());
+	}
+	
+	@Test
+	void myArrayIntTest() {
+		MyArrayInt ar = new MyArrayInt(10, 2);
+		assertEquals(2, ar.get(5));
+		ar.setAll(3);
+		assertEquals(3, ar.get(5));	
+		ar.set(5, 1);
+		assertEquals(1, ar.get(5));	
+	}
+	
+	@Test
+	void maxNumberWithNegativeImageTest() {
+		int[] ar = {1000, 3, -2, -200, 200, -3};
+		int[] ar1 = {1000, -100, 3, -4};
+		assertEquals(200, maxNumberWithNegativeImageTest(ar));
+		assertEquals(-1, maxNumberWithNegativeImageTest(ar1));
+	}
+	
+	int maxNumberWithNegativeImageTest(int[] ar) {
+		Set<Integer> set = new HashSet<>();
+		int res = -1;
+		boolean setAdd;
+		for (int num : ar) {
+			setAdd = true;
+			setAdd = num > 0 ? set.add(num) : set.add(-num);
+			if (!setAdd && num > res) {
+				res = num;
+			}
+		}
+		return res;
+	}
+	
+	@Test
+	void treeIteratingTest() {
+		int array[] = {1, 11, 111, 32, 9, 1234, 99, 992};
+		createAndIterateTreeInOrder(array);
+	}
+
+	private void createAndIterateTreeInOrder(int[] array) {
+		// create tree, add in tree numbers from a given array
+		// and iterate in the order of array defined in 122
+		TreeComparator comp = new TreeComparator();
+		TreeSet<Integer> tree = new TreeSet<>(comp);
+		for (int n : array) {
+			tree.add(n);
+		}
+		Iterator<Integer> it = tree.iterator();
+		for(int n : array) {
+			assertEquals(n, it.next());
+		}
 	}
 
 }
